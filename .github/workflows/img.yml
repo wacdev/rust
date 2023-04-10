@@ -1,0 +1,36 @@
+name: 'docker img'
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main']
+    paths:
+      - 'img/**'
+  pull_request:
+    branches: ['main']
+    paths: 
+      - 'img/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # - run: ./img/docker.build.sh
+      #   shell: bash
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./img
+          push: false
+          tags: art/img:latest
+          cache-from: type=registry,ref=art/img:latest
+          cache-to: type=inline
+

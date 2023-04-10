@@ -1,0 +1,50 @@
+[package]
+name = "img"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.70"
+axum = "0.6.12"
+fast_image_resize = "2.7.0"
+image = { version = "0.24.6", features = ["avif-encoder", "libwebp", "webp", "webp-encoder"] }
+jpegxl-rs = { path="./jpegxl-rs/jpegxl-rs" }
+jpegxl-sys = { path="./jpegxl-rs/jpegxl-sys" }
+reqwest = { version = "0.11.16", features = ["tokio-rustls", "http3"] }
+strum = "0.24.1"
+strum_macros = "0.24.3"
+time = {version="0.3.20",features=["macros"]}
+tower = { version = "0.4.13", features = ["timeout"] }
+tower-http = { version = "0.4.0", features = ["trace"] }
+# tower-http = { version = "0.4.0", features = ["trace"] }
+tracing = "0.1.37"
+
+[dependencies.tracing-subscriber]
+version = "0.3.16"
+features = ["time", "env-filter"]
+
+# [target.'cfg(target_os = "linux")'.dependencies]
+# jpegxl-rs = { path="./jpegxl-rs/jpegxl-rs", features=["vendored"] }
+
+[dependencies.serde]
+version = "1.0.159"
+features = ["derive"]
+
+[dependencies.tokio]
+version = "1.27.0"
+features = ["macros", "rt-multi-thread"]
+
+[profile.release]
+lto = true
+opt-level = 3
+incremental = true
+codegen-units = 1
+overflow-checks = false
+panic = 'abort'
+strip = true
+debug-assertions = false
+
+
+
