@@ -11,7 +11,7 @@ use image::{
 };
 use jpegxl_rs::{decoder_builder, image::ToDynamic};
 use strum_macros::{AsRefStr, EnumString};
-
+use tracing::instrument;
 // Blackmagic URSA Mini Pro是一款革命性的数字电影摄影机，搭载 12288 x 6480 12K Super 35传感器
 const MAX_WIDTH: u32 = 12288;
 const MAX_HEIGHT: u32 = 12288;
@@ -21,7 +21,7 @@ const MAX_HEIGHT: u32 = 12288;
 pub enum Ext {
   avif,
   webp,
-  // jxl,
+  jxl,
 }
 
 // static INSTANCE: OnceCell<JPEGXL_DECODER> = OnceCell::new();
@@ -112,7 +112,6 @@ pub fn resize(
 }
 
 fn encode_by_ext(img: &[u8], ext: &Ext, width: u32, height: u32) -> Result<Option<Vec<u8>>> {
-  dbg!(width, height, ext);
   // Write destination image as PNG-file
   let mut result_buf = BufWriter::new(Vec::new());
 
@@ -125,6 +124,7 @@ fn encode_by_ext(img: &[u8], ext: &Ext, width: u32, height: u32) -> Result<Optio
   */
 
   match ext {
+    // https://github.com/kornelski/cavif-rs --speed=n — Encoding speed between 1 (best, but slowest) and 10 (fastest, but a blurry mess), the default value is 4. Speeds 1 and 2 are unbelievably slow, but make files ~3-5% smaller. Speeds 7 and above degrade compression significantly, and are not recommended.
     Ext::avif => AvifEncoder::new_with_speed_quality(&mut result_buf, 5, 64).write_image(
       img,
       width,
@@ -133,24 +133,26 @@ fn encode_by_ext(img: &[u8], ext: &Ext, width: u32, height: u32) -> Result<Optio
     )?,
     Ext::webp => WebPEncoder::new_with_quality(&mut result_buf, WebPQuality::lossy(82))
       .write_image(img, width, height, ColorType::Rgba8)?,
-    // Ext::jxl => {
-    //   let img = DynamicImage::ImageRgba8(
-    //     ImageBuffer::<Rgba<u8>, Vec<u8>>::from_raw(width, height, img.into()).unwrap(),
-    //   );
-    //
-    //   let mut encoder = encoder_builder().build()?;
-    //
-    //   // let mut encoder = encoder_builder()
-    //   //   .quality(3.0)
-    //   //   // .lossless(false) // default false
-    //   //   .speed(EncoderSpeed::Kitten)
-    //   //   .build()?;
-    //
-    //   dbg!(1111);
-    //   let buffer: EncoderResult<f32> = encoder.encode(&img.to_rgba16(), width, height)?;
-    //   dbg!(222);
-    //   return Ok(Some(buffer.data));
-    // }
+    Ext::jxl => {
+      use image::{DynamicImage, ImageBuffer, Rgba};
+      use jpegxl_rs::{encode::EncoderResult, encoder_builder};
+      let img = DynamicImage::ImageRgba8(
+        ImageBuffer::<Rgba<u8>, Vec<u8>>::from_raw(width, height, img.into()).unwrap(),
+      );
+
+      let mut encoder = encoder_builder().build()?;
+
+      // let mut encoder = encoder_builder()
+      //   .quality(3.0)
+      //   // .lossless(false) // default false
+      //   .speed(EncoderSpeed::Kitten)
+      //   .build()?;
+
+      dbg!(1111);
+      let buffer: EncoderResult<f32> = encoder.encode(&img.to_rgba16(), width, height)?;
+      dbg!(222);
+      return Ok(Some(buffer.data));
+    }
   };
   Ok(Some(result_buf.into_inner()?))
 }

@@ -4,6 +4,7 @@ use axum::{
   extract::Path,
   response::{IntoResponse, Response},
 };
+use tracing::instrument;
 
 use crate::{err::Result, img, img::Ext};
 

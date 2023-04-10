@@ -2,16 +2,19 @@ use axum::{
   http::StatusCode,
   response::{IntoResponse, Response},
 };
+use tracing::{error, instrument};
 
+#[derive(Debug)]
 pub struct Err(anyhow::Error);
 pub type Result<T, E = Err> = anyhow::Result<T, E>;
 
 // Tell axum how to convert `Err` into a response.
 impl IntoResponse for Err {
   fn into_response(self) -> Response {
+    error!("{}", self.0);
     (
       StatusCode::INTERNAL_SERVER_ERROR,
-      format!("Something went wrong: {}", self.0),
+      format!("ERR: {}", self.0),
     )
       .into_response()
   }
