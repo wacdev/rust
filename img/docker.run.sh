@@ -8,4 +8,4 @@ IMG=art/img
 
 NAME=$(basename $IMG)
 
-(docker stop $NAME || true) && exec docker run --rm -e PORT=$PORT --name $NAME $IMG
+(docker stop $NAME || true) && exec docker run --rm -e PORT=$PORT -p$PORT:$PORT --name $NAME $IMG
