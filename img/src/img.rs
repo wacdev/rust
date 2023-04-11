@@ -134,24 +134,22 @@ fn encode_by_ext(img: &[u8], ext: &Ext, width: u32, height: u32) -> Result<Optio
     Ext::webp => WebPEncoder::new_with_quality(&mut result_buf, WebPQuality::lossy(82))
       .write_image(img, width, height, ColorType::Rgba8)?,
     Ext::jxl => {
-      use image::{DynamicImage, ImageBuffer, Rgba};
-      use jpegxl_rs::{encode::EncoderResult, encoder_builder};
-      let img = DynamicImage::ImageRgba8(
-        ImageBuffer::<Rgba<u8>, Vec<u8>>::from_raw(width, height, img.into()).unwrap(),
-      );
-
-      let mut encoder = encoder_builder().build()?;
-
+      todo!();
+      // use image::{DynamicImage, ImageBuffer, Rgba};
+      // use jpegxl_rs::{
+      //   encode::{EncoderResult, EncoderSpeed},
+      //   encoder_builder,
+      // };
+      // let img = DynamicImage::ImageRgba8(
+      //   ImageBuffer::<Rgba<u8>, Vec<u8>>::from_raw(width, height, img.into()).unwrap(),
+      // );
+      //
       // let mut encoder = encoder_builder()
       //   .quality(3.0)
-      //   // .lossless(false) // default false
       //   .speed(EncoderSpeed::Kitten)
       //   .build()?;
-
-      dbg!(1111);
-      let buffer: EncoderResult<f32> = encoder.encode(&img.to_rgba16(), width, height)?;
-      dbg!(222);
-      return Ok(Some(buffer.data));
+      // let buffer: EncoderResult<f32> = encoder.encode(&img.to_rgba16(), width, height)?;
+      // return Ok(Some(buffer.data));
     }
   };
   Ok(Some(result_buf.into_inner()?))
