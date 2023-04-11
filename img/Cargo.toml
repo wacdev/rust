@@ -9,6 +9,7 @@ edition = "2021"
 anyhow = "1.0.70"
 axum = "0.6.12"
 fast_image_resize = "2.7.0"
+futures = "0.3.28"
 image = { version = "0.24.6", features = ["avif-encoder", "libwebp", "webp", "webp-encoder"] }
 jpegxl-rs = { path="./jpegxl-rs/jpegxl-rs" }
 jpegxl-sys = { path="./jpegxl-rs/jpegxl-sys" }
