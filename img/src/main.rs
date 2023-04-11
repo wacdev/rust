@@ -29,7 +29,7 @@ const TIMEOUT: u64 = 600;
 async fn main() {
   let local_time = OffsetTime::new(
     UtcOffset::from_hms(8, 0, 0).unwrap(),
-    format_description!("[year][month][day] [hour][minute][second] >"),
+    format_description!("[year][month][day] [hour][minute][second]"),
   );
 
   tracing_subscriber::registry()
