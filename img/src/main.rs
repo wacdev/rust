@@ -3,6 +3,7 @@
 mod env;
 mod err;
 mod img;
+mod log;
 mod root;
 mod urlmap;
 

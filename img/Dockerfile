@@ -33,7 +33,7 @@ RUN ./sh/cpso.sh && ./sh/upx.sh
 
 FROM scratch
 
-ENV RUST_LOG=debug,supervisor=warn,hyper=warn,rustls=warn
+ENV RUST_LOG=debug,supervisor=warn,hyper=warn,rustls=warn,quinn_udp=warn
 COPY --from=build /app/target/app .
 
 ENV LD_LIBRARY_PATH=/lib
