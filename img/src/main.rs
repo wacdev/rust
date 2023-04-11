@@ -76,11 +76,7 @@ async fn main() {
           // ...
           info!("\n< {:?} {:?}\n", _response.headers(), _latency)
         })
-        .on_failure(
-          |_error: ServerErrorsFailureClass, _latency: Duration, _span: &Span| {
-            error!("{:?} {:?}", _error, _span)
-          },
-        ),
+        .on_failure(|_error: ServerErrorsFailureClass, _latency: Duration, _span: &Span| {}),
     )
     .timeout(Duration::from_secs(TIMEOUT))
     .layer(ServiceBuilder::new())

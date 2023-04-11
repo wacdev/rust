@@ -39,5 +39,7 @@ COPY --from=build /app/target/app .
 ENV LD_LIBRARY_PATH=/lib
 COPY --from=build /so/ /lib/
 
+ENV RUST_BACKTRACE=full
+
 CMD ["/app"]
 
