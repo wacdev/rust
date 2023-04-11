@@ -73,7 +73,7 @@ async fn main() {
         })
         .on_response(|_response: &Response, _latency: Duration, _span: &Span| {
           // ...
-          info!("\n{:?} {:?}\n", _response, _latency)
+          info!("\n< {:?} {:?}\n", _response.headers(), _latency)
         })
         .on_failure(
           |_error: ServerErrorsFailureClass, _latency: Duration, _span: &Span| {
