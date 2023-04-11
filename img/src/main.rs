@@ -33,12 +33,13 @@ async fn main() {
   );
 
   tracing_subscriber::registry()
-        .with(fmt::layer().with_timer(local_time)
-            .with_level(false))
-        // .with_file(true)
-        // .with_line_number(true)
-        .with(EnvFilter::from_default_env())
-        .init();
+    .with(
+      fmt::layer().with_timer(local_time), // .with_level(false)
+                                           // .with_file(true)
+                                           // .with_line_number(true)
+    )
+    .with(EnvFilter::from_default_env())
+    .init();
 
   let addr = SocketAddr::from(([0, 0, 0, 0], env_default("PORT", 9911)));
   info!("http://{}", addr);
