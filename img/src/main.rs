@@ -9,30 +9,18 @@ mod urlmap;
 use std::{net::SocketAddr, time::Duration};
 
 use axum::{
-  body::{Body, BoxBody, Bytes},
   error_handling::HandleErrorLayer,
-  extract::MatchedPath,
-  http::{HeaderMap, Request, StatusCode},
-  response::{Html, Response},
+  http::{Request, StatusCode},
+  response::Response,
   routing::get,
   BoxError, Router,
 };
 use env::env_default;
 use time::{macros::format_description, UtcOffset};
-use tower::{util::AndThenLayer, ServiceBuilder};
-use tower_http::{
-  classify::ServerErrorsFailureClass,
-  trace::{DefaultMakeSpan, DefaultOnRequest, TraceLayer},
-};
-use tracing::{error, info, info_span, instrument, Level, Span};
-use tracing_subscriber::{
-  fmt,
-  fmt::{format::FmtSpan, time::UtcTime},
-  layer::SubscriberExt,
-  prelude::__tracing_subscriber_SubscriberExt,
-  util::SubscriberInitExt,
-  EnvFilter,
-};
+use tower::ServiceBuilder;
+use tower_http::{classify::ServerErrorsFailureClass, trace::TraceLayer};
+use tracing::{error, info, info_span, Span};
+use tracing_subscriber::{fmt, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
 
 use crate::{fmt::time::OffsetTime, root::root};
 const TIMEOUT: u64 = 600;

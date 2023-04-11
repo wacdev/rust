@@ -2,7 +2,7 @@ use axum::{
   http::StatusCode,
   response::{IntoResponse, Response},
 };
-use tracing::{error, instrument};
+use tracing::{error};
 
 #[derive(Debug)]
 pub struct Err(anyhow::Error);
