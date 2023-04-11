@@ -5,4 +5,4 @@ cd $DIR
 set -ex
 
 cargo build
-RUST_BACKTRACE=full exec ./target/debug/img
+RUST_BACKTRACE=short exec ./target/debug/img
